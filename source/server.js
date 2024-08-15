@@ -1,267 +1,182 @@
-import http, { validateHeaderValue } from 'http'
+import cors from 'cors';
+import express from 'express';
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+import { connectToDB, db } from './db.js'; // Ensure this path is correct
+import { ObjectId } from 'mongodb';
+import chalk from 'chalk'; // Import chalk
 
-const port = 300;
+dotenv.config();
 
-const server = http.createServer((req, res) => {
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-    
-    if (req.url === '/myself') {
-        res.statusCode = 200
-        res.setHeader("Content-Type", "text/plain");
-        res.write("My team name is AST team\n")
-        res.write("what are you doing\n")
-        res.write("G.Haritha pushpa")
-        res.write("9618390632")
-        res.write("harithagoluguri26@gmail.com")
-        res.write("SKILLS-")
-        res.write("Problem-Solving skills \n critical Thinking Skills\n Flexibility Communication Skills Teamwork Organization Skills Creativity")
-        res.write(" Critical Thinking Skills")
-        res.write(" Flexibility")
-        res.write("Communication skills")
-        res.write("Team work")
-        res.write("Organization skills")
-        res.write("Creativity")
+// Simple route to confirm the server is running
+app.get('/', (req, res) => {
+    res.json("Server is running successfully!");
+});
 
-        res.write("")
-        res.write("")
-        res.write("")
-        res.write("")
-        res.write("")
-        res.write("")
-        res.write("")
-        res.write("")
+// Set up Nodemailer transporter
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASSWORD
+    }
+});
 
-        
-        res.end()
-     }
-     else if (req.url === '/html') {
-        res.statusCode = 200
-        res.setHeader("Content-Type", "text/html");
-        res.write(`<!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Document</title>
-                <link rel="STYLESHEET" href="sytle.css"/>
-                <style>
-                    body{
-                font-style: oblique;
-                background-color: rgb(200, 247, 247);
-                font-family:'Times New Roman', Times, serif;
-            }
-            /* .image{
-                width:100%;
-                height:100vh;
-                display:flex;
-                align-items:center;
-                background-color:Hex #F7CAC9;
-                justify-content:center;
-            } */
-            .img{
-                border-radius:50%;
-            }
-            section{
-                font-style:calc(30px);
-                font-family: Arial, Helvetica, sans-serif;
-                background-color: rgb(173, 201, 238);
-                padding:30px;
-                box-shadow: rgb(43,19,19);
-                border-radius: 10px;
-                margin:10px;
-            }
-            table{
-                width:90%;
-            }
-            tr{
-                font-family: Arial, Helvetica, sans-serif;
-                font-weight:100px;
-                background-color:rgb(235, 210, 240);
-                padding:15px;
-            }
-            th{
-                font-family: Arial, Helvetica, sans-serif;
-                background-color:rgb(199, 173, 229);
-                color:white;
-                padding:15px;
-            }
-            tr{
-                font-style: inherit;
-                font-family: Arial, Helvetica, sans-serif;
-                padding:15px;
-            }
-            label{
-                font-style: italic;
-                font-weight:bold;
-                margin-top:30px;
-            }
-            input{
-                font-style: inherit;
-                padding:10px;
-                margin-top: 5px;
-                margin-bottom: 10px;
-                border-radius: 5px;
-                border:1px solid #ccc;
-            
-            }
-            submit{
-                font-style: var(5px);
-                font-family: Verdana, Geneva, Tahoma, sans-serif;
-                background-color:rgb(185, 179, 171);
-                color:white;
-                padding:30px;
-                border-radius:5px;
-                cursor:pointer;
-            }
-                </style>
-            </head>
-            <body>
-                <section>
-                    
-                    <div class="image"><img src="hari.jpg"/>
-            
-                    </div>
-                     <h2>G.Haritha pushpa</h2>
-                     <h3>9618390632</h3>
-                     <h3>harithagoluguri26@gmail.com</h3>
-                     
-             
-                 </section>
-                 <section>
-                     <h3>SKILLS-</h3>
-                     <ol>
-                        Problem-Solving Skills
-                        Critical Thinking Skills
-                        Flexibility
-                        Communication Skills
-                        Teamwork
-                        Organization Skills
-                        Creativity
-                     </ol>
-                 </section>
-                 <section>
-                     <h3>HOBBIES-</h3>
-                      <ul>
-                         <li>Volunteering</li>
-                         <li>Photography</li>
-                         <li>Painting</li>
-                         <li>Sports</li>
-                         <li>Dancing</li>
-                      </ul>
-                      </section>
-                      <section>
-                      <h3>STRENGHTS-</h3>
-                      <ol>
-                        <li> Disciplined</li>
-                        <li>Fast Learner </li>
-                        <li>Dedicated</li>
-                        <li> Versatile</li>
-                         <li> Honest</li>
-                        </ol>
-                    </section>
-                    <section>
-                     <h3>WEAKNESS-</h3>
-                     <ul>
-                        <li>I have trouble saying no</li>
-                        <li>Difficulty asking for help</li>
-                        <li>Extremely Introverted</li>
-                        <li>Delegating tasks</li>
-            
-                     </ul>
-                </section>
-                <section>
-                    <h3>EDUCATION</h3>
-                    
-                    <div class="education section">
-                        <h2 class="section-title">Education</h2>
-                        <div class="section-content">
-                            <div class="education-item">
-                                <h3>Example University</h3>
-                                <p>Bachelor of Science in Information Technology, 2025</p>
-                                <p>GPA: 3.9/4.0</p>
-                            </div>
-                        </div>
-                    </div>
-            
-                   
-                </section>
-                <section>
-                    <h3>CONTACT FORM</h3>
-                    <form>
-                        <label for="name">name:</label>
-                        <input id="message"></input><br>
-                        <label for="  mail">mail:</label>
-                        <input id="message"></input><br>
-                        <label for="message">message:</label>
-                        <input id="message"></input><br>
-                        <input type="submit">
-                    </form>
-                </section>
-            
-            
-            
-            </body>
-            </html>`)
+// Route to handle login
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    // Basic validation
+    if (!email || !password) {
+        return res.status(400).json({ error: 'Both email and password are required.' });
+    }
+
+    try {
+        const user = await db.collection('login').findOne({ email });
+
+        if (user && user.password === password) {
+            res.json({ message: 'Login successful!' });
+        } else {
+            res.status(401).json({ error: 'Invalid email or password.' });
         }
-            else if (req.url === '/senddata') {
-                res.statusCode = 200
-                res.setHeader("Content-Type", "application/json");
-                const resume= {
-                    "profile": {
-                      "name": "G.Haritha pushpa",
-                      "phone": "9618390632",
-                      "email": "harithagoluguri26@gmail.com"
-                    },
-                    "skills": [
-                      "Problem-Solving Skills",
-                      "Critical Thinking Skills",
-                      "Flexibility",
-                      "Communication Skills",
-                      "Teamwork",
-                      "Organization Skills",
-                      "Creativity"
-                    ],
-                    "hobbies": [
-                      "Volunteering",
-                      "Photography",
-                      "Painting",
-                      "Sports",
-                      "Dancing"
-                    ],
-                    "strengths": [
-                      "Disciplined",
-                      "Fast Learner",
-                      "Dedicated",
-                      "Versatile",
-                      "Honest"
-                    ],
-                    "weaknesses": [
-                      "I have trouble saying no",
-                      "Difficulty asking for help",
-                      "Extremely Introverted",
-                      "Delegating tasks"
-                    ],
-                    "education": [
-                      {
-                        "institution": "Example University",
-                        "degree": "Bachelor of Science in Information Technology",
-                        "year": "2025",
-                        "gpa": "3.9/4.0"
-                      }
-                    ],
-                    "contact_form": {
-                      "name": "message",
-                      "mail": "message",
-                      "message": "message"
-                    }
-                  }
-                  res.end(JSON.stringify(resume))
-                   }
-                   else{
-                    res.statusCode = 400
-                    res.end("page not found");
-                   }
-            });
-server.listen(port, () => {
-    console.log(`Server running at ${port}`);
+    } catch (error) {
+        console.error(chalk.red('Login failed:'), error); // Use chalk to colorize error messages
+        res.status(500).json({ error: 'Login failed. Please try again.' });
+    }
+});
+
+// Route to handle event registration
+app.post('/register', async (req, res) => {
+    const { firstName, lastName, email, phone, agree, eventName, emailReminder } = req.body;
+
+    if (!firstName || !lastName || !email || !phone || !agree || !eventName) {
+        return res.status(400).json({ error: 'All fields are required and you must agree to the health terms.' });
+    }
+
+    try {
+        // Save registration to the database
+        const result = await db.collection('registrations').insertOne({
+            firstName,
+            lastName,
+            email,
+            phone,
+            agree,
+            eventName,
+            registrationDate: new Date(),
+        });
+
+    // Construct the email content
+        const mailOptions = {
+            from: process.env.EMAIL, // Use environment variable
+            to: email,
+            subject: 'Event Registration Confirmation',
+            text: `Hi ${firstName},\n\nThank you for registering for ${eventName}!\n\nBest regards,\nEvent Team`,
+        };
+
+        if (emailReminder) {
+            mailOptions.text += `\n\nYou will receive email reminders about this event.`;
+        }
+
+        // Send confirmation email
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error('Error sending email:', error);
+                return res.status(500).json({ error: 'Registration successful, but failed to send confirmation email.' });
+            }
+            console.log('Email sent:', info.response);
+            res.json({ message: 'Registered successfully! Confirmation email sent.' });
+        });
+        
+    } catch (error) {
+        console.error('Registration failed:', error);
+        res.status(500).json({ error: 'Registration failed. Please try again.' });
+    }
+});
+
+// Event Management Routes
+app.get('/events', async (req, res) => {
+    try {
+        const events = await db.collection('events').find().toArray();
+        res.status(200).json(events);
+    } catch (error) {
+        console.error(chalk.red('Failed to fetch events:'), error);
+        res.status(500).json({ error: 'Failed to fetch events' });
+    }
+});
+
+app.post('/events', async (req, res) => {
+    try {
+        const newEvent = req.body;
+        await db.collection('events').insertOne(newEvent);
+        res.status(201).json(newEvent);
+    } catch (error) {
+        console.error(chalk.red('Failed to add event:'), error);
+        res.status(500).json({ error: 'Failed to add event' });
+    }
+});
+
+app.patch('/events/:id/postpone', async (req, res) => {
+    try {
+        const { newDate } = req.body;
+        const event = await db.collection('events').findOneAndUpdate(
+            { _id: ObjectId(req.params.id) },
+            { $set: { eventDate: newDate } },
+            { returnDocument: 'after' }
+        );
+        res.status(200).json(event.value);
+    } catch (error) {
+        console.error(chalk.red('Failed to postpone event:'), error);
+        res.status(500).json({ error: 'Failed to postpone event' });
+    }
+});
+
+app.delete('/events/:id', async (req, res) => {
+    try {
+        await db.collection('events').deleteOne({ _id: ObjectId(req.params.id) });
+        res.status(200).json({ message: 'Event canceled' });
+    } catch (error) {
+        console.error(chalk.red('Failed to cancel event:'), error);
+        res.status(500).json({ error: 'Failed to cancel event' });
+    }
+});
+
+// Route to handle reviews
+// Route to handle reviews
+app.post('/reviews', async (req, res) => {
+    const { user, reviews } = req.body;
+
+    // Validate the input
+    if (!user || !reviews) {
+        return res.status(400).json({ error: 'All fields are required.' });
+    }
+
+    try {
+        // Save the review to the database
+        const result = await db.collection('login').insertOne({
+            user,
+            reviews,
+            date: new Date(),
+        });
+
+        // Check if the review was successfully inserted
+        if (result.acknowledged && result.insertedId) {
+            return res.status(201).json({ message: 'Review added successfully', reviewId: result.insertedId });
+        } else {
+            throw new Error('Failed to add review');
+        }
+    } catch (error) {
+        console.error(chalk.red('Failed to add review:'), error);
+        return res.status(500).json({ error: 'Failed to add review' });
+    }
+});
+
+
+connectToDB(() => {
+    app.listen(9000, () => {
+        console.log(chalk.green("Server running at port 9000"));
+    });
 });

@@ -1,14 +1,19 @@
-import { MongoClient } from "mongodb";
+import { MongoClient } from 'mongodb';
 
-let db;
-async function connectToDB(cb) {
-    const url = "mongodb://localhost:27017"
-    const client = new MongoClient(url);
-    await client.connect();
-    db = client.db("AST_Database");
-    cb();
-}
+const uri = 'mongodb://localhost:27017'; // Update with your MongoDB URI
+const client = new MongoClient(uri);
 
-// connectToDB()
+let db = null;
 
-export { connectToDB, db };
+export const connectToDB = async (callback) => {
+    try {
+        await client.connect();
+        db = client.db('frontend'); // Update with your database name
+        console.log("Connected to database");
+        callback();
+    } catch (error) {
+        console.error("Failed to connect to database", error);
+    }
+};
+
+export { db };
